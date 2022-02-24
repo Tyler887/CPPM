@@ -1,7 +1,7 @@
 [Setup]
 AppName=CPPM 0.x Beta
 AppVersion=0.1
-DefaultDirName={autopf}\Tyler887/CPPM
+DefaultDirName={autopf}\Tyler887\CPPM
 DefaultGroupName=Cross-Platform Package Manager
 PrivilegesRequiredOverridesAllowed=commandline dialog
 [Files]
