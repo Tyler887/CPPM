@@ -5,6 +5,6 @@ self.title = "Cross-Platform Package Manager"
 
 setup(
     options = {'py2exe': {'bundle_files': 1, 'compressed': True}},
-    console = [{'script': "example.py"}],
+    console = [{'script': "cppm.py"}],
     zipfile = None,
 )
