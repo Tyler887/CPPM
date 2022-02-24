@@ -11,6 +11,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "github-actions"
-    directory: "/.github/workflows/python-app.yml"
+    directory: "/"
     schedule:
       interval: "daily"
