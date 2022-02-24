@@ -7,5 +7,4 @@ PrivilegesRequiredOverridesAllowed=commandline dialog
 [Files]
 Source: ".\dist\cppm.exe"; DestDir: "{app}"
 [Run]
-Filename: "{app}\cppm.exe"; Description: "Open CPPM shell"
-Filename: "https://github.com/Tyler887/CPPM"; Description: "Open CPPM GitHub repository"
+Filename: "{app}\cppm.exe"; Description: "Open CPPM in the shell"; Flags: postinstall nowait skipifsilent unchecked
