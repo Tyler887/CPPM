@@ -34,6 +34,7 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Create binary
+      working-directory: ${GITHUB_WORKSPACE} # Ensures we don't get a "nothing to build" error.
       run: |
         pip install py2exe
         python -m py2exe
@@ -43,6 +44,7 @@ jobs:
         name: binary
         path: .\dist\cppm.exe
     - name: Build binary installer
+      working-directory: ${GITHUB_WORKSPACE} # Ensures we don't get an error.
       run: iscc ".\installer.iss" /F ".\installer.exe"
     - name: Upload artifact 2
       uses: actions/upload-artifact@v2
