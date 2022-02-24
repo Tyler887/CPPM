@@ -45,7 +45,7 @@ jobs:
     - name: Build binary installer
       run: |
         cd .\
-        iscc /F ".\installer.iss" /O ".\installer.exe"
+        iscc /F "CppmInstaller.EXE" ".\installer.iss"
     - name: Upload artifact 2
       uses: actions/upload-artifact@v2
       with:
