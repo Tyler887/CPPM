@@ -9,4 +9,8 @@ updates:
     directory: "/" # Location of package manifests
 
     schedule:
-      interval: "hourly"
+      interval: "daily"
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows/python-app.yml"
+    schedule:
+      interval: "daily"
