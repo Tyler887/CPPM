@@ -7,5 +7,5 @@ Developer binary builds (for Microsoft Windows) are at https://github.com/Tyler8
 Released python scripts and executable Windows files are at https://github.com/Tyler887/CPPM/releases. The latest stable release files can be found at https://github.com/Tyler887/pm/releases/latest.
 ### GH Actions
 CPPM is a shell, so CPPM must be set as the shell in the step using it.
-### License
+## License
 This software is released under the [2-clause BSD license](./LICENSE).
