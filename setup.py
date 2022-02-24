@@ -1,8 +1,6 @@
 print("Importing os module...")
 import os
 try:
-  app = 'cmd' if os.name=="nt" else 'sh'
-  print(f"Loading. Press Ctrl+C to execute {app}.")
   print("Importing sys module...")
   import sys
   print("Importing time module...")
