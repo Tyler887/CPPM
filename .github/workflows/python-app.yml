@@ -46,8 +46,9 @@ jobs:
       run: |
         cd .\
         iscc ".\installer.iss"
+        mv "D:\a\CPPM\CPPM\Output\mysetup.exe" "D:\a\CPPM\CPPM\CppmInstaller.EXE"
     - name: Upload artifact 2
       uses: actions/upload-artifact@v2
       with:
         name: installer
-        path: .\setup\installer.exe
+        path: .\CppmInstaller.EXE
