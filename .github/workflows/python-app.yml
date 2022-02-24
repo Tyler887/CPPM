@@ -36,8 +36,7 @@ jobs:
     - name: Create binary
       run: |
         pip install py2exe
-        cd .\
-        python -m py2exe
+        python .\setup.py py2exe
     - name: Upload artifact 1
       uses: actions/upload-artifact@v2
       with:
