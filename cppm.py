@@ -17,7 +17,7 @@ try:
     import gnupg
   print("Importing platform module...")
   import platform
-  print("Importing art and colorama modules...")
+  print("Importing art, requests and colorama modules...")
   try:
     from art import *
   except ImportError:
@@ -32,6 +32,13 @@ try:
     os.system("python -m pip install colorama")
     print("Attempting import again...")
     from colorama import *
+  try:
+    import requests
+  except ImportError:
+    print("Package requests not installed. Executing pip to request install...")
+    os.system("python -m pip install requests")
+    print("Attempting import again...")
+    import requests
   os.system('cls' if os.name=="nt" else 'clear') # else coloring will obviously not work on windows console host
   print(f"{Back.WHITE}{Fore.BLACK}Welcome to CPPM!{Style.RESET_ALL}")
   time.sleep(0.5)
@@ -59,8 +66,30 @@ while True:
     elif cmd == "exit":
       exit()
     else:
-      if cmd != "":
+      if cmd != "" and not cmd.startswith("install ") and not cmd.startswith("upgrade ") and not cmd.startswith("uninstall "):
          print(f"{Fore.RED}Invalid CPPM command `{cmd}'!{Style.RESET_ALL} Type `help' or `?' for a list of commands that\ncan be executed in CPPM.")
+      if cmd.startswith("install "):
+          asset = input("Provide the asset: ")
+          repo = cmd.replace("install ","",1)
+          print("Attempting to get latest GitHub release...")
+          response = requests.get("https://api.github.com/repos/" + repo + "/releases/latest")
+          file_name = "~/cppm/" + asset
+          with open(file_name, "wb") as f:
+             print("Downloading %s" % file_name)
+             response = requests.get(link, stream=True)
+             total_length = response.headers.get('content-length')
+
+    if total_length is None: # no content length header
+        f.write(response.content)
+    else:
+        dl = 0
+        total_length = int(total_length)
+        for data in response.iter_content(chunk_size=4096):
+            dl += len(data)
+            f.write(data)
+            done = int(50 * dl / total_length)
+            sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
+            sys.stdout.flush()
   except KeyboardInterrupt:
        print("\nNote: Ctrl+C restarts CPPM! It does not kill the process.")
        os.system("python " + __file__)
