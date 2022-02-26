@@ -75,7 +75,7 @@ while True:
           response = requests.get("https://api.github.com/repos/" + repo + "/releases/latest")
           file_name = "~/cppm/" + asset
           with open(file_name, "wb") as f:
-             print("Downloading %s" % file_name)
+             print("Downloading %s" % asset)
              response = requests.get(link, stream=True)
              total_length = response.headers.get('content-length')
 
