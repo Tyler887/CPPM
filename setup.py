@@ -4,6 +4,7 @@ import time
 from colorama import *
 from art import *
 import sys
+import requests
 import py2exe
 from distutils.core import setup
 setup(
