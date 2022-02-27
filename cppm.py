@@ -63,6 +63,8 @@ while True:
     elif cmd == "list":
       with open(os.path.dirname(os.path.realpath(__file__)) + '/pkglist.txt', 'r') as reader:
         print(reader.read())
+    elif cmd == "install":
+      print("Provide a github repo after `install'!")
     elif cmd == "exit":
       exit()
     else:
@@ -71,25 +73,53 @@ while True:
       if cmd.startswith("install "):
           asset = input("Provide the asset: ")
           repo = cmd.replace("install ","",1)
+          dir = input("Provide the directory to install " + repo + ": ")
+          try:
+            os.mkdir(dir)
+          except:
+            print("An error has occurred during the creation of the package directory.\nThis package will be installed to the working directory.")
+            dir = os.getcwd()
+          else:
+            print(f"{Fore.GREEN}{dir} has been created successfully!{Style.RESET_ALL}")
           print("Attempting to get latest GitHub release...")
-          response = requests.get("https://api.github.com/repos/" + repo + "/releases/latest")
-          file_name = "~/cppm/" + asset
+          link = f"https://github.com/{repo}/releases/latest/download/{asset}"
+          file_name = dir + "/" + asset
           with open(file_name, "wb") as f:
              print("Downloading %s" % asset)
              response = requests.get(link, stream=True)
              total_length = response.headers.get('content-length')
+          
+             if total_length is None: # no content length header
+               f.write(response.content)
+             else:
+               dl = 0
+               total_length = int(total_length)
+               for data in response.iter_content(chunk_size=4096):
+                  dl += len(data)
+                  f.write(data)
+                  done = int(50 * dl / total_length)
+                  per = int(done * 2)
+                  import os
 
-    if total_length is None: # no content length header
-        f.write(response.content)
-    else:
-        dl = 0
-        total_length = int(total_length)
-        for data in response.iter_content(chunk_size=4096):
-            dl += len(data)
-            f.write(data)
-            done = int(50 * dl / total_length)
-            sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
-            sys.stdout.flush()
+                  if os.path.exists(f"{dir}/{asset}") and os.path.getsize(f"{dir}/{asset}") > 25:
+                       sizedisplay = 1
+                       size = os.path.getsize(f"{dir}/{asset}")
+                  else:
+                       sizedisplay = 0
+                  if sizedisplay:
+                    sys.stdout.write("\r%s%s" % ('■' * done, ' ' * (50-done)) + f" | {per}% Done ({size} Bytes)" )
+                  else:
+                    sys.stdout.write("\r%s%s" % ('■' * done, ' ' * (50-done)) + f" | {per}% Done" )    
+                  sys.stdout.flush()
+      print("\n")
+      if asset.endswith(".zip"):
+           print("Detected that the asset is a zipfile. Unzipping and deleting zipfile...")
+           import zipfile
+           with zipfile.ZipFile(dir + "/" + asset, 'r') as zip_ref:
+              zip_ref.extractall(dir)
+           os.unlink(f"{dir}/{asset}")
+      print("Adding " + dir + " to the PATH...")
+      sys.path.insert(0,dir)
   except KeyboardInterrupt:
        print("\nNote: Ctrl+C restarts CPPM! It does not kill the process.")
        os.system("python " + __file__)
