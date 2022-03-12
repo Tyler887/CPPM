@@ -5,7 +5,7 @@ print("Importing os module...")
 import os
 
 try:
-    app = "cmd" if os.name == "nt" else "sh"
+    app = 'cmd' if os.name == "nt" else 'sh'
     print(f"Loading. Press Ctrl+C to execute {app}.")
     print("Importing sys module...")
     import sys
@@ -50,7 +50,7 @@ try:
         print("Attempting import again...")
         import requests
     os.system(
-        "cls" if os.name == "nt" else "clear"
+        'cls' if os.name == "nt" else 'clear'
     )  # else coloring will obviously not work on windows console host
     print(f"{Back.WHITE}{Fore.BLACK}Welcome to CPPM!{Style.RESET_ALL}")
     time.sleep(0.5)
@@ -67,8 +67,8 @@ if not os.path.isdir(f"{home}/cppm-{os.name}"):
     print("Setting up. Please wait.")
     os.makedirs(f"{home}/cppm-{os.name}")
     os.makedirs(f"{home}/cppm-{os.name}/apps")
-    infofile = open(f"{home}/cppm-{os.name}/info.txt", "a+")  # open file in append mode
-    infofile.write("This folder describes the files for CPPM.")
+    infofile = open(f"{home}/cppm-{os.name}/info.txt", 'a+')  # open file in append mode
+    infofile.write('This folder describes the files for CPPM.')
     infofile.close()
 while True:
     try:
@@ -83,7 +83,7 @@ while True:
             print("list: List the packages installed (usally stored in a text file)")
         elif cmd == "list":
             with open(
-                os.path.dirname(os.path.realpath(__file__)) + "/pkglist.txt", "r"
+                os.path.dirname(os.path.realpath(__file__)) + '/pkglist.txt', 'r'
             ) as reader:
                 print(reader.read())
         elif cmd == "install":
@@ -113,7 +113,7 @@ while True:
                 with open(file_name, "wb") as f:
                     print("Downloading %s" % asset)
                     response = requests.get(link, stream=True)
-                    total_length = response.headers.get("content-length")
+                    total_length = response.headers.get('content-length')
 
                     if total_length is None:  # no content length header
                         f.write(response.content)
@@ -137,12 +137,12 @@ while True:
                                 sizedisplay = 0
                             if sizedisplay:
                                 sys.stdout.write(
-                                    "\r%s%s" % ("■" * done, " " * (50 - done))
+                                    "\r%s%s" % ('■' * done, ' ' * (50 - done))
                                     + f" | {per}% Done ({size} Bytes)"
                                 )
                             else:
                                 sys.stdout.write(
-                                    "\r%s%s" % ("■" * done, " " * (50 - done))
+                                    "\r%s%s" % ('■' * done, ' ' * (50 - done))
                                     + f" | {per}% Done"
                                 )
                             sys.stdout.flush()
@@ -152,7 +152,7 @@ while True:
                     import zipfile
 
                     with zipfile.ZipFile(
-                        f"{home}/cppm-{os.name}/apps/{repo}/{asset}", "r"
+                        f"{home}/cppm-{os.name}/apps/{repo}/{asset}", 'r'
                     ) as zip_ref:
                         zip_ref.extractall(f"{home}/cppm-{os.name}/apps/{repo}")
                     os.unlink(f"{home}/cppm-{os.name}/apps/{repo}/{asset}")
