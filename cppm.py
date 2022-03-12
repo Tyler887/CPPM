@@ -1,3 +1,5 @@
+from os.path import expanduser
+home = expanduser("~")
 print("Importing os module...")
 import os
 try:
@@ -17,6 +19,8 @@ try:
     import gnupg
   print("Importing platform module...")
   import platform
+  print("Importing glob module...")
+  import glob
   print("Importing art, requests and colorama modules...")
   try:
     from art import *
@@ -49,6 +53,13 @@ except KeyboardInterrupt:
   os.system("python " + __file__)
   exit()
 print("Type `help' or `?' for command list, type `license' for legal notices")
+if not os.path.isdir(f"{home}/cppm-{os.name}"):
+  print("Setting up. Please wait.")
+  os.makedirs(f"{home}/cppm-{os.name}")
+  os.makedirs(f"{home}/cppm-{os.name}/apps")
+  infofile = open(f"{home}/cppm-{os.name}/info.txt", 'a+')  # open file in append mode
+  infofile.write('This folder describes the files for CPPM.')
+  infofile.close()
 while True:
   try:
     cmd = input("cppm>")
@@ -64,7 +75,7 @@ while True:
       with open(os.path.dirname(os.path.realpath(__file__)) + '/pkglist.txt', 'r') as reader:
         print(reader.read())
     elif cmd == "install":
-      print("Provide a github repo after `install'!")
+      print("Usage: install <GitHub repository>\n\nHelps install a package through a GitHub Release. This is so\nCPPM can reject closed-source apps like the old PowerShell (or 'Windows PowerShell').\n\nFor example, to install PowerShell Core (open-source version of Windows PowerShell), run:\n          install PowerShell/PowerShell")
     elif cmd == "exit":
       exit()
     else:
@@ -73,17 +84,11 @@ while True:
       if cmd.startswith("install "):
           asset = input("Provide the asset: ")
           repo = cmd.replace("install ","",1)
-          dir = input("Provide the directory to install " + repo + ": ")
-          try:
-            os.mkdir(dir)
-          except:
-            print("An error has occurred during the creation of the package directory.\nThis package will be installed to the working directory.")
-            dir = os.getcwd()
-          else:
-            print(f"{Fore.GREEN}{dir} has been created successfully!{Style.RESET_ALL}")
+          
+          os.makedirs(f"{home}/cppm-{os.name}/apps/{repo}")
           print("Attempting to get latest GitHub release...")
           link = f"https://github.com/{repo}/releases/latest/download/{asset}"
-          file_name = dir + "/" + asset
+          file_name = f"{home}/cppm-{os.name}/apps/{repo}/{asset}"
           with open(file_name, "wb") as f:
              print("Downloading %s" % asset)
              response = requests.get(link, stream=True)
@@ -111,16 +116,13 @@ while True:
                   else:
                     sys.stdout.write("\r%s%s" % ('■' * done, ' ' * (50-done)) + f" | {per}% Done" )    
                   sys.stdout.flush()
-      print("\n")
-      if asset.endswith(".zip"):
-           print("Detected that the asset is a zipfile. Unzipping and deleting zipfile...")
-           import zipfile
-           with zipfile.ZipFile(dir + "/" + asset, 'r') as zip_ref:
-              zip_ref.extractall(dir)
-           os.unlink(f"{dir}/{asset}")
-      print("Adding " + dir + " to the PATH...")
-      sys.path.insert(0,dir)
+          print("!")
+          if asset.endswith(".zip"):
+             print(f"Extracting {asset}...")
+             import zipfile
+             with zipfile.ZipFile(f"{home}/cppm-{os.name}/apps/{repo}/{asset}", 'r') as zip_ref:
+                zip_ref.extractall(f"{home}/cppm-{os.name}/apps/{repo}")
+             os.unlink(f"{home}/cppm-{os.name}/apps/{repo}/{asset}")
+          print(f"Remember to add this package to the PATH using this PowerShell command:\n$env:Path += '{home}/cppm-{os.name}/apps/{repo}'")
   except KeyboardInterrupt:
-       print("\nNote: Ctrl+C restarts CPPM! It does not kill the process.")
-       os.system("python " + __file__)
-       exit()
+       print("^C")
