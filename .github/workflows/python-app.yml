@@ -38,7 +38,7 @@ jobs:
         pip install py2exe
         python .\setup.py py2exe
     - name: Upload artifact 1
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: binary
         path: .\dist\cppm.exe
@@ -48,7 +48,7 @@ jobs:
         iscc ".\installer.iss"
         mv "D:\a\CPPM\CPPM\Output\mysetup.exe" "D:\a\CPPM\CPPM\CppmInstaller.EXE"
     - name: Upload artifact 2
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: installer
         path: .\CppmInstaller.EXE
